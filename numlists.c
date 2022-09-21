@@ -3,21 +3,14 @@
 #include <stdlib.h>
 
 /* 初始化函数 */
-void initNumLists(NumLists *head, const int data)
+NumLists* initNumLists(const int data)
 {
-    if(NULL != head)
-    {
-        printf("Init lists fail\n");
-        exit(-1);
-    }
-    else
-    {
-        head = (NumLists*)malloc(sizeof(NumLists));
+    NumLists *head = NULL;
+    head = (NumLists*)malloc(sizeof(NumLists));
 
-        head->num = 1;
-        head->next = NULL;
-        head->data = data;
-    }
+    head->num = 1;
+    head->next = NULL;
+    head->data = data;
 }
 
 /* 添加函数 */
@@ -43,7 +36,7 @@ void addNumLists(NumLists *head, const int data)
 
         list = (NumLists*)malloc(sizeof(NumLists));
 
-        head->next = list;
+        plist->next = list;
         list->num = i;
         list->data = data;      /* 添加数据 */
         list->next = NULL;      /* 以NULL作为链表结尾 */
@@ -53,22 +46,50 @@ void addNumLists(NumLists *head, const int data)
 /* 插入函数 */
 void insertNumLists(NumLists *head, const int data, int pos)
 {
-    ;
+    int i = 2;
+    NumLists *plist = head;
+    NumLists *list = NULL;
+
+    while (i < pos && plist != NULL)
+    {
+        plist = plist->next;
+        i++;
+    }
+
+    list = (NumLists*)malloc(sizeof(NumLists));
+
+    list->num = pos;
+    list->data = data;
+    list->next = plist->next;
+    plist->next = list;
+
+    plist = list->next;
+    while(NULL != plist)
+    {
+        plist->num++;
+        plist = plist->next;
+    }
+
 }
 
 /* 迭代函数 */
-int pairNumLists(const NumLists *head)
+int pairNumLists(NumLists *head)
 {
-    static int n = 0;
-    if(head->next == NULL)
+    static int n = 1;
+    NumLists *plist = head;
+
+    if(NULL == plist->next)
     {
-        return head->data;
+        return plist->data;
     }
     else
     {
-        int rdata;
+        for(int i = 0; i < n; i++)
+        {
+            plist = plist->next;
+        }
         n++;
-        return rdata;
+        return plist->data;
     }
 }
 

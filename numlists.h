@@ -11,16 +11,16 @@ typedef struct numlists
 } NumLists;
 
 /* 初始化函数 */
-void initNumLists(NumLists *head, const int data);
+NumLists* initNumLists(const int data);
 
 /* 添加函数 */
 void addNumLists(NumLists *head, const int data);
 
 /* 插入函数 */
-void insertNumLists(NumLists *head, const int data, int pos);
+void insertNumLists(NumLists *head, const int data, const int pos);
 
 /* 迭代函数 */
-int pairNumLists(const NumLists *head);
+int pairNumLists(NumLists *head);
 
 /* 删除函数 */
 void deleteNumLists(NumLists *head);
