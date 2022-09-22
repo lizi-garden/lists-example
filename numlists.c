@@ -23,7 +23,6 @@ bool Add(NumLists *lists, int data)
     int count = 2;
 
     /* 查找到链表最后一位 */
-    /* 不知道为什么，此处一定要用plist->next */
     while(NULL != plist->next)
     {
         plist = plist->next;
@@ -51,10 +50,13 @@ bool Insert(NumLists *lists, const int pos, const int data)
     NumLists *plist = lists;
     NumLists *new = NULL;
 
-    /* 此处i必须为2，原因不明 */
-    for(int i = 2; i < pos; i++)
+    /*
+     * 3个长度的链表，只需要移动两次，故从1开始而不是0
+     * 指针只需要移动到前一位来进行插入操作，故指向pos-1
+     */
+    for(int i = 1; i < pos - 1; i++)
     {
-        if(plist == NULL)
+        if(NULL == plist)
         {
             return false;
         }
@@ -96,9 +98,15 @@ void Show(NumLists *lists)
     }
 }
 
+/* 检查函数 */
 bool Check(NumLists *lists)
 {
-    ;
+    NumLists *plist = lists;
+
+    while(NULL != plist)
+    {
+        ;
+    }
 }
 
 /* 迭代函数 */
@@ -123,9 +131,26 @@ int Pair(NumLists *lists)
 }
 
 /* 删除函数 */
-bool Delete(NumLists *head, const int pos)
+bool Delete(NumLists *lists, const int pos)
 {
-    ;
+    NumLists *plist = lists;
+    NumLists *temp = NULL;
+
+    for(int i = 1; i < pos - 1; i++)
+    {
+        if(NULL == plist)
+        {
+            return false;
+        }
+        else
+        {
+            plist = plist->next;
+        }
+    }
+    
+    temp = plist->next;
+    plist->next = temp->next;
+    free(temp);
 }
 
 /* 释放函数 */

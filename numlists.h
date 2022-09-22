@@ -15,7 +15,7 @@ typedef struct numlists
 NumLists* Init(const int data);
 
 /* 添加函数 */
-bool Add(NumLists *head, const int data);
+bool Add(NumLists *lists, const int data);
 
 /* 插入函数 */
 bool Insert(NumLists *lists, const int pos, const int data);
@@ -27,12 +27,12 @@ void Show(NumLists *lists);
 bool Check(NumLists *lists);
 
 /* 迭代函数 */
-int Pair(NumLists *head);
+int Pair(NumLists *lists);
 
 /* 删除函数 */
-bool Delete(NumLists *head, const int pos);
+bool Delete(NumLists *lists, const int pos);
 
 /* 释放函数 */
-void Free(NumLists *head);
+void Free(NumLists *lists);
 
 #endif
