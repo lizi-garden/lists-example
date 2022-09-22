@@ -4,39 +4,18 @@
 
 int main(int argc, char *argv[])
 {
-    NumLists *head = NULL;
-    NumLists *plist = NULL;
-    int i = 1;
+    NumLists *list = NULL;
 
-    head = initNumLists(8);
+    list = Init(8);
 
-    addNumLists(head, 6);
-    addNumLists(head, 14);
+    Add(list, 14);
+    Add(list, 16);
 
-    printf("这是原链表的数据\n");
+    Insert(list, 2, 4);
 
-    /* 输出链表内容 */
-    for(plist = head; NULL != plist; plist = plist->next)
-    {
-        printf("%d:\t%d\n", plist->num, plist->data);
-    }
+    Show(list);
 
-    int num, input;
-    printf("输入需要插入的整数：");
-    scanf("%d", &input);
-
-    printf("输入需要插入的位置：");
-    scanf("%d", &num);
-
-    insertNumLists(head, input, num);
-
-    printf("\n");
-    printf("这是修改后的链表数据\n");
-
-    for(plist = head; NULL != plist; plist = plist->next)
-    {
-        printf("%d:\t%d\n", plist->num, plist->data);
-    }
+    Free(list);
 
     return 0;
 }

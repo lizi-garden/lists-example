@@ -3,80 +3,109 @@
 #include <stdlib.h>
 
 /* 初始化函数 */
-NumLists* initNumLists(const int data)
+NumLists* Init(const int data)
 {
-    NumLists *head = NULL;
-    head = (NumLists*)malloc(sizeof(NumLists));
+    NumLists *lists = NULL;
+    lists = (NumLists*)malloc(sizeof(NumLists));
 
-    head->num = 1;
-    head->next = NULL;
-    head->data = data;
+    lists->num = 1;
+    lists->next = NULL;
+    lists->data = data;
+
+    return lists;
 }
 
 /* 添加函数 */
-void addNumLists(NumLists *head, const int data)
+bool Add(NumLists *lists, int data)
 {
-    if(NULL == head)
+    NumLists *new = NULL;
+    NumLists *plist = lists;
+    int count = 2;
+
+    /* 查找到链表最后一位 */
+    /* 不知道为什么，此处一定要用plist->next */
+    while(NULL != plist->next)
     {
-        printf("You must init lists in advance\n");
-        exit(-2);
+        plist = plist->next;
+        count++;
     }
+
+    new = (NumLists*)malloc(sizeof(NumLists));
+
+    plist->next = new;
+    new->num = count;
+    new->data = data;   /* 添加数据 */
+    new->next = NULL;   /* 以NULL作为链表结尾 */
+
+    if(NULL == plist)
+        return false;
     else
     {
-        NumLists *list = NULL;
-        NumLists *plist = head;
-        int i = 2;
-
-        /* 查找到链表最后一位 */
-        while(NULL != plist->next)
-        {
-            plist = plist->next;
-            i++;
-        }
-
-        list = (NumLists*)malloc(sizeof(NumLists));
-
-        plist->next = list;
-        list->num = i;
-        list->data = data;      /* 添加数据 */
-        list->next = NULL;      /* 以NULL作为链表结尾 */
+        return true;
     }
 }
 
 /* 插入函数 */
-void insertNumLists(NumLists *head, const int data, int pos)
+bool Insert(NumLists *lists, const int pos, const int data)
 {
-    int i = 2;
-    NumLists *plist = head;
-    NumLists *list = NULL;
+    NumLists *plist = lists;
+    NumLists *new = NULL;
 
-    while (i < pos && plist != NULL)
+    /* 此处i必须为2，原因不明 */
+    for(int i = 2; i < pos; i++)
     {
-        plist = plist->next;
-        i++;
+        if(plist == NULL)
+        {
+            return false;
+        }
+        else
+        {
+            plist = plist->next;
+        }
     }
 
-    list = (NumLists*)malloc(sizeof(NumLists));
+    new = (NumLists*)malloc(sizeof(NumLists));
 
-    list->num = pos;
-    list->data = data;
-    list->next = plist->next;
-    plist->next = list;
+    /* 进行插入操作 */
+    new->next = plist->next;
+    plist->next = new;
 
-    plist = list->next;
+    new->num = pos;
+    new->data = data;
+
+    /* 重新对后面的数进行编号 */
+    plist = new->next;
     while(NULL != plist)
     {
         plist->num++;
         plist = plist->next;
     }
 
+    return true;
+}
+
+/* 显示函数 */
+void Show(NumLists *lists)
+{
+    NumLists *plist = lists;
+
+    while(NULL != plist)
+    {
+        printf("NO:%d\t%d\n", plist->num, plist->data);
+        plist = plist->next;
+    }
+}
+
+bool Check(NumLists *lists)
+{
+    ;
 }
 
 /* 迭代函数 */
-int pairNumLists(NumLists *head)
+int Pair(NumLists *lists)
 {
     static int n = 1;
-    NumLists *plist = head;
+    NumLists *plist = lists;
 
     if(NULL == plist->next)
     {
@@ -94,16 +123,21 @@ int pairNumLists(NumLists *head)
 }
 
 /* 删除函数 */
-void deleteNumLists(NumLists *head);
+bool Delete(NumLists *head, const int pos)
+{
+    ;
+}
 
 /* 释放函数 */
-void freeNumLists(NumLists *head)
+void Free(NumLists *lists)
 {
-    NumLists *temp = head;
+    NumLists *plist = lists;
 
-    while(NULL != temp->next)
+    while(NULL != plist->next)
     {
-        ;
+        NumLists *temp = plist;
+        plist = plist->next;
+        free(temp);
     }
 }
 
