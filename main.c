@@ -12,6 +12,7 @@ int main(int argc, char *argv[])
     Add(list, 16);
 
     Insert(list, 2, 4);
+    Delete(list, 4);
 
     Show(list);
 

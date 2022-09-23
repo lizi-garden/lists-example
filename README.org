@@ -1,0 +1,312 @@
+* 链表示例（C语言）
+
+** 简介
+
+尝试自己用C语言写链表，写的还可以，开源出来交流分享。
+项目会随着学习的深入，质量会不断提升，达到便于学习，方便调用的目的。
+项目主要是为了学习使用，不建议用于开发工作中。如果有开发需求，推荐使用[[https://water-melon.github.io/Melon/][Melon]]。
+
+** 函数
+
+*** Init(const int data)
+
+- 返回值：NumLists*
+- 功能：初始化链表
+- 函数原形：
+
+#+NAME: Init_Function
+#+BEGIN_SRC C :exports none
+/* 初始化函数 */
+NumLists* Init(const int data)
+{
+    NumLists *lists = NULL;
+    lists = (NumLists*)malloc(sizeof(NumLists));
+
+    lists->num = 1;
+    lists->next = NULL;
+    lists->data = data;
+
+    return lists;
+}
+#+END_SRC
+
+*** Add(Numlists *lists, int data)
+
+- 返回值：bool
+- 功能：添加新节点于链表尾部
+- 函数原形：
+
+#+NAME: Add_Function
+#+BEGIN_SRC C :exports none
+/* 添加函数 */
+bool Add(NumLists *lists, int data)
+{
+    NumLists *new = NULL;
+    NumLists *plist = lists;
+    int count = 2;
+
+    /* 查找到链表最后一位 */
+    while(NULL != plist->next)
+    {
+        plist = plist->next;
+        count++;
+    }
+
+    new = (NumLists*)malloc(sizeof(NumLists));
+
+    plist->next = new;
+    new->num = count;
+    new->data = data;   /* 添加数据 */
+    new->next = NULL;   /* 以NULL作为链表结尾 */
+
+    if(NULL == plist)
+        return false;
+    else
+    {
+        return true;
+    }
+}
+#+END_SRC
+
+*** Insert(NumLists *lists, const int pos, const int data)
+
+- 返回值：bool
+- 功能：在指定位置插入节点
+- 函数原形：
+
+#+NAME: Insert_Function
+#+BEGIN_SRC C :exports none
+/* 插入函数 */
+bool Insert(NumLists *lists, const int pos, const int data)
+{
+    NumLists *plist = lists;
+    NumLists *new = NULL;
+
+    for(int i = 1; i < pos - 1; i++)
+    {
+        if(plist == NULL)
+        {
+            return false;
+        }
+        else
+        {
+            plist = plist->next;
+        }
+    }
+
+    new = (NumLists*)malloc(sizeof(NumLists));
+
+    /* 进行插入操作 */
+    new->next = plist->next;
+    plist->next = new;
+
+    new->num = pos;
+    new->data = data;
+
+    /* 重新对后面的数进行编号 */
+    plist = new->next;
+    while(NULL != plist)
+    {
+        plist->num++;
+        plist = plist->next;
+    }
+
+    return true;
+}
+#+END_SRC
+
+*** Show(Numlists *lists)
+
+- 返回值：void
+- 功能：显示链表内容
+- 函数原形：
+
+#+NAME: Show_Function
+#+BEGIN_SRC C :exports none
+/* 显示函数 */
+void Show(NumLists *lists)
+{
+    NumLists *plist = lists;
+
+    while(NULL != plist)
+    {
+        printf("NO:%d\t%d\n", plist->num, plist->data);
+        plist = plist->next;
+    }
+}
+#+END_SRC
+
+*** Free(Numlists *lists)
+
+- 返回值：void
+- 功能：释放链表
+- 函数原形：
+
+#+NAME: Free_Function
+#+BEGIN_SRC C :exports none
+/* 释放函数 */
+void Free(NumLists *lists)
+{
+    NumLists *plist = lists;
+
+    while(NULL != plist->next)
+    {
+        NumLists *temp = plist;
+        plist = plist->next;
+        free(temp);
+    }
+}
+#+END_SRC
+
+***
+
+- 返回值：
+- 功能：
+- 函数原形：
+
+#+NAME: 
+#+BEGIN_SRC C :exports none
+#+END_SRC
+
+** 变量
+
+*** NumLists结构体
+用来存储链表的节点，包含数据和下一个节点的位置，还包含了一个节点的位置序号，之后会看情况选择是否保留。
+
+原形：
+
+#+NAME:NumLists
+#+BEGIN_SRC C :exports none
+typedef struct numlists
+{
+    int num;
+    int data;
+    struct numlists *next;
+} NumLists;
+#+END_SRC
+
+*** data
+
+节点的数据
+
+*** num
+
+节点的编号
+
+*** lists
+
+本质是链表头，但采用了lists作为变量名而不是head，为了更好地抽象化链表使用。
+
+** 源代码
+
+#+NAME: numlists.h
+#+BEGIN_SRC C :tangle numlists.h :exports none :noweb yes :main no
+#ifndef _NUMLISTS_H
+#define _NUMLISTS_H
+
+#include <stdlib.h>
+#include <stdbool.h>
+
+<<Numlists>>
+
+/* 初始化函数 */
+NumLists* Init(const int data);
+
+/* 添加函数 */
+bool Add(NumLists *lists, const int data);
+
+/* 插入函数 */
+bool Insert(NumLists *lists, const int pos, const int data);
+
+/* 显示函数 */
+void Show(NumLists *lists);
+
+/* 检查函数 */
+bool Check(NumLists *lists);
+
+/* 迭代函数 */
+int Pair(NumLists *lists);
+
+/* 删除函数 */
+bool Delete(NumLists *lists, const int pos);
+
+/* 释放函数 */
+void Free(NumLists *lists);
+
+#endif
+#+END_SRC
+
+#+NAME: main.c
+#+BEGIN_SRC C :tangle main.c :exports none :noweb yes
+#include <stdio.h>
+#include <stdlib.h>
+#include "numlists.h"
+
+int main(int argc, char *argv[])
+{
+    NumLists *list = NULL;
+
+    list = Init(8);
+
+    Add(list, 14);
+    Add(list, 16);
+
+    Insert(list, 2, 4);
+    Delete(list, 4);
+
+    Show(list);
+
+    Free(list);
+
+    return 0;
+}
+#+END_SRC
+
+#+NAME: numlists.c
+#+BEGIN_SRC C :tangle numlists.c :exports none :noweb yes :main no
+#include "numlists.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+<<Init_Function>>
+
+<<Add_Function>>
+
+<<Insert_Function>>
+
+<<Show_Function>>
+
+bool Check(NumLists *lists)
+{
+    ;
+}
+
+/* 迭代函数 */
+int Pair(NumLists *lists)
+{
+    static int n = 1;
+    NumLists *plist = lists;
+
+    if(NULL == plist->next)
+    {
+        return plist->data;
+    }
+    else
+    {
+        for(int i = 0; i < n; i++)
+        {
+            plist = plist->next;
+        }
+        n++;
+        return plist->data;
+    }
+}
+
+/* 删除函数 */
+bool Delete(NumLists *head, const int pos)
+{
+    ;
+}
+
+<<Free_Function>>
+#+END_SRC

@@ -23,7 +23,6 @@ bool Add(NumLists *lists, int data)
     int count = 2;
 
     /* 查找到链表最后一位 */
-    /* 不知道为什么，此处一定要用plist->next */
     while(NULL != plist->next)
     {
         plist = plist->next;
@@ -51,8 +50,7 @@ bool Insert(NumLists *lists, const int pos, const int data)
     NumLists *plist = lists;
     NumLists *new = NULL;
 
-    /* 此处i必须为2，原因不明 */
-    for(int i = 2; i < pos; i++)
+    for(int i = 1; i < pos - 1; i++)
     {
         if(plist == NULL)
         {
@@ -140,4 +138,3 @@ void Free(NumLists *lists)
         free(temp);
     }
 }
-
