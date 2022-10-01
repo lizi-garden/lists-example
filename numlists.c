@@ -94,9 +94,25 @@ void Show(NumLists *lists)
     }
 }
 
+/* 检查链表，并重新编号 */
 bool Check(NumLists *lists)
 {
-    ;
+    NumLists *plist = lists;
+    int num = 1;
+
+    if(NULL == plist)
+    {
+        printf("Your list is emtry!\n");
+    }
+
+    while(NULL != plist)
+    {
+        plist->num = num;
+        num++;
+        plist = plist->next;
+    }
+
+    return true;
 }
 
 /* 迭代函数 */
@@ -120,10 +136,92 @@ int Pair(NumLists *lists)
     }
 }
 
-/* 删除函数 */
-bool Delete(NumLists *head, const int pos)
+/* 删除函数 基于位置 */
+bool Delete_pos(NumLists *lists, const int pos)
 {
-    ;
+    NumLists *temp = lists;
+    NumLists *plist = NULL;
+
+    /* 从1开始计数 */
+    for(int i = 1; i < pos; i++)
+    {
+        if(NULL == temp)
+        {
+            printf("May be you should set a smaller pos number\n");
+            return false;
+        }
+        else
+        {
+            plist = temp;
+            temp = temp->next;
+        }
+    }
+
+    plist->next = temp->next;
+    free(temp);
+}
+
+/* 删除函数 基于内容 */
+bool Delete_data(NumLists *lists, const int data)
+{
+    NumLists *temp = lists;
+    NumLists *plist = NULL;
+
+    while(temp->data != data)
+    {
+        if(NULL == temp)
+        {
+            printf("Fall to search\n");
+            return false;
+        }
+        else
+        {
+            plist = temp;
+            temp = temp->next;
+        }
+    }
+
+    plist->next = temp->next;
+    free(temp);
+}
+
+/* 筛选函数 基于内容保留 */
+bool Filter_data(NumLists *lists, const int min, const int max)
+{
+    NumLists *plist = lists;
+    NumLists *temp = plist->next;
+
+    while(NULL != temp)
+    {
+        if((temp->data < min)||(temp->data > max))
+        {
+            plist->next = temp->next;
+            free(temp);
+            temp = plist->next;
+        }
+        else
+        {
+            plist = temp;
+            temp = temp->next;
+        }
+    }
+
+    return true;
+}
+
+/* 筛选函数 基于内容显示 */
+bool Filter_print(NumLists *lists, const int min, const int max)
+{
+    NumLists *plist = lists;
+
+    while(NULL != plist)
+    {
+        if((plist->data > min)&&(plist->data < max))
+        {
+            printf("NO:%d\t%d\n", plist->num, plist->data);
+        }
+        plist = plist->next;
+    }
 }
 
 /* 释放函数 */
