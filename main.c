@@ -1,17 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "numlists.h"
+#include "lists.h"
 
 int main(int argc, char *argv[])
 {
-    NumLists *list = NULL;
+    Lists *list = NULL;
     int n = 0;
     int input = 0;
 
     int min = 0;
     int max = 0;
 
-    printf("请输入需要的链表长度n：\n");
+    printf("请输入需要的链表长度n：");
     scanf("%d", &n);
 
     printf("请输入链表中的%d个数据，用空格隔开：\n", n);
@@ -32,9 +32,7 @@ int main(int argc, char *argv[])
     printf("输入筛选条件的最小值和最大值：\n");
     scanf("%d", &min);
     scanf("%d", &max);
-    Filter_data(list, min, max);
-
-    Check(list);
+    list = Filter_data(list, min, max);
 
     printf("这是筛选后的链表：\n");
     Show(list);

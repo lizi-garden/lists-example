@@ -1,14 +1,15 @@
+C_FLAG=-g
 
-build:main.o numlists.o
-	$(CC) main.o numlists.o -o numlists
+build:main.o lists.o
+	$(CC) main.o lists.o -o lists $(C_FLAG)
 
 main.o:main.c
-	$(CC) -c main.c
+	$(CC) -c main.c $(C_FLAG)
 
-numlists.o:numlists.c numlists.h
-	$(CC) -c numlists.c
+lists.o:lists.c lists.h
+	$(CC) -c lists.c $(C_FLAG)
 
 clean:
-	rm numlists main.o numlists.o
+	rm lists main.o lists.o
 
 .PHONY: build clean

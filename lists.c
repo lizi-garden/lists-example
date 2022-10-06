@@ -1,14 +1,13 @@
-#include "numlists.h"
+#include "lists.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 /* 初始化函数 */
-NumLists* Init(const int data)
+Lists* Init(const int data)
 {
-    NumLists *lists = NULL;
-    lists = (NumLists*)malloc(sizeof(NumLists));
+    Lists *lists = NULL;
+    lists = (Lists*)malloc(sizeof(Lists));
 
-    lists->num = 1;
     lists->next = NULL;
     lists->data = data;
 
@@ -16,23 +15,20 @@ NumLists* Init(const int data)
 }
 
 /* 添加函数 */
-bool Add(NumLists *lists, int data)
+bool Add(Lists *lists, int data)
 {
-    NumLists *new = NULL;
-    NumLists *plist = lists;
-    int count = 2;
+    Lists *new = NULL;
+    Lists *plist = lists;
 
     /* 查找到链表最后一位 */
     while(NULL != plist->next)
     {
         plist = plist->next;
-        count++;
     }
 
-    new = (NumLists*)malloc(sizeof(NumLists));
+    new = (Lists*)malloc(sizeof(Lists));
 
     plist->next = new;
-    new->num = count;
     new->data = data;   /* 添加数据 */
     new->next = NULL;   /* 以NULL作为链表结尾 */
 
@@ -45,10 +41,10 @@ bool Add(NumLists *lists, int data)
 }
 
 /* 插入函数 */
-bool Insert(NumLists *lists, const int pos, const int data)
+bool Insert(Lists *lists, const int pos, const int data)
 {
-    NumLists *plist = lists;
-    NumLists *new = NULL;
+    Lists *plist = lists;
+    Lists *new = NULL;
 
     for(int i = 1; i < pos - 1; i++)
     {
@@ -62,64 +58,36 @@ bool Insert(NumLists *lists, const int pos, const int data)
         }
     }
 
-    new = (NumLists*)malloc(sizeof(NumLists));
+    new = (Lists*)malloc(sizeof(Lists));
 
     /* 进行插入操作 */
     new->next = plist->next;
     plist->next = new;
 
-    new->num = pos;
     new->data = data;
-
-    /* 重新对后面的数进行编号 */
-    plist = new->next;
-    while(NULL != plist)
-    {
-        plist->num++;
-        plist = plist->next;
-    }
 
     return true;
 }
 
 /* 显示函数 */
-void Show(NumLists *lists)
+void Show(Lists *lists)
 {
-    NumLists *plist = lists;
+    Lists *plist = lists;
+    int count = 1;
 
     while(NULL != plist)
     {
-        printf("NO:%d\t%d\n", plist->num, plist->data);
+        printf("NO:%d\t%d\n", count, plist->data);
+        count++;
         plist = plist->next;
     }
-}
-
-/* 检查链表，并重新编号 */
-bool Check(NumLists *lists)
-{
-    NumLists *plist = lists;
-    int num = 1;
-
-    if(NULL == plist)
-    {
-        printf("Your list is emtry!\n");
-    }
-
-    while(NULL != plist)
-    {
-        plist->num = num;
-        num++;
-        plist = plist->next;
-    }
-
-    return true;
 }
 
 /* 迭代函数 */
-int Pair(NumLists *lists)
+int Pair(Lists *lists)
 {
     static int n = 1;
-    NumLists *plist = lists;
+    Lists *plist = lists;
 
     if(NULL == plist->next)
     {
@@ -137,10 +105,10 @@ int Pair(NumLists *lists)
 }
 
 /* 删除函数 基于位置 */
-bool Delete_pos(NumLists *lists, const int pos)
+bool Delete_pos(Lists *lists, const int pos)
 {
-    NumLists *temp = lists;
-    NumLists *plist = NULL;
+    Lists *temp = lists;
+    Lists *plist = NULL;
 
     /* 从1开始计数 */
     for(int i = 1; i < pos; i++)
@@ -162,10 +130,10 @@ bool Delete_pos(NumLists *lists, const int pos)
 }
 
 /* 删除函数 基于内容 */
-bool Delete_data(NumLists *lists, const int data)
+bool Delete_data(Lists *lists, const int data)
 {
-    NumLists *temp = lists;
-    NumLists *plist = NULL;
+    Lists *temp = lists;
+    Lists *plist = NULL;
 
     while(temp->data != data)
     {
@@ -186,18 +154,27 @@ bool Delete_data(NumLists *lists, const int data)
 }
 
 /* 筛选函数 基于内容保留 */
-bool Filter_data(NumLists *lists, const int min, const int max)
+Lists* Filter_data(Lists *lists, const int min, const int max)
 {
-    NumLists *plist = lists;
-    NumLists *temp = plist->next;
+    Lists *plist = NULL;
+    Lists *temp = lists;
 
     while(NULL != temp)
     {
         if((temp->data < min)||(temp->data > max))
         {
-            plist->next = temp->next;
-            free(temp);
-            temp = plist->next;
+            if(NULL == plist)
+            {
+                lists = lists->next;    
+                temp = lists;
+                plist = NULL;
+            }
+            else
+            {
+                plist->next = temp->next;
+                free(temp);
+                temp = plist->next;
+            }
         }
         else
         {
@@ -206,32 +183,33 @@ bool Filter_data(NumLists *lists, const int min, const int max)
         }
     }
 
-    return true;
+    return lists;
 }
 
 /* 筛选函数 基于内容显示 */
-bool Filter_print(NumLists *lists, const int min, const int max)
+bool Filter_print(Lists *lists, const int min, const int max)
 {
-    NumLists *plist = lists;
+    Lists *plist = lists;
+    int count = 1;
 
     while(NULL != plist)
     {
         if((plist->data > min)&&(plist->data < max))
         {
-            printf("NO:%d\t%d\n", plist->num, plist->data);
+            printf("NO:%d\t%d\n", count, plist->data);
         }
         plist = plist->next;
     }
 }
 
 /* 释放函数 */
-void Free(NumLists *lists)
+void Free(Lists *lists)
 {
-    NumLists *plist = lists;
+    Lists *plist = lists;
 
     while(NULL != plist->next)
     {
-        NumLists *temp = plist;
+        Lists *temp = plist;
         plist = plist->next;
         free(temp);
     }
